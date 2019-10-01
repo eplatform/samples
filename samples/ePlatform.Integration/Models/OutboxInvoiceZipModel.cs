@@ -13,6 +13,7 @@ namespace ePlatform.Integration.Models
 
         public int AppType { get; set; }
         public EArsivInfoModel EArsivInfo { get; set; }
+        public bool UseFirstAlias { get; set; }
 
     }
 }

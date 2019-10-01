@@ -217,7 +217,7 @@ namespace ePlatform.Integration.Controllers
                 {
                     Ettn = null,
                     Prefix = null,
-                    InvoiceNumber = null,
+                    InvoiceNumber = "EPA2019131231477",//Manuel fatura İd tanımlamalarında yenilenmelidir
                     InvoiceProfileType = (int)InvoiceProfilType.EARSIVFATURA,
                     IssueDate = DateTime.Now.ToString(),
                     Type = 1,
@@ -253,11 +253,11 @@ namespace ePlatform.Integration.Controllers
                     InvoiceId = Guid.Empty.ToString(),
                     Status = (int)InvoiceStatus.Draft,
                     XsltCode = null,
-                    UseManualInvoiceId = false,
+                    UseManualInvoiceId = true,//Fatura oluşturulurke belirlenen fatura numarasını atar false durumunda otomatik bir fatura belirler
                     GeneralInfoModel = generalInfo,
                     AddressBook = addressBook,
                     InvoiceLines = invoiceLines,
-                    RecordType = 0
+                    RecordType = 0//e-fatura:1,e-arşiv:0 gönderilmelidir.
                 };
 
                 string token = resToken.access_token;
@@ -285,164 +285,34 @@ namespace ePlatform.Integration.Controllers
 
         //https://localhost:5001/home/postzip
 
+
         [HttpGet]
-        [Route("postzip")]
+        [Route("postubl")]
         public async Task<IActionResult> PostZip()
         {
             if (resToken != null)
             {
+                //UBL oluşturmak için kullanığımız Metodumuzu Çağırıyoruz
 
-                // PostZip metodu ile ilk önce göndermek istediğiniz faturayı XML olarak oluşturmaktayız,
-                //XML oluşturmak için ePlatform.Integration.Models.Invoice21 Modelinden yararlanılmaktadır,
-                //Invoice21 modelini istemiş olduğunuz bilgiler ile oluşturduktan sonra,
-                //İlgili Modeli ilk önce XML formatına dönüştürerek dönüştürülen XML dosyasınıda Ziplemek için
-                //bytcode dönüştürmekteyiz daha sonra bu bytcodu Base64 formatıyla stringe dönültürerek outbox uç noktasına
-                //Http.Post isteği ile faturayı zip olarak gönderebilirsiniz,
-
-                //Model Doldurma aşaması
-                //Müşteri Başladı
-                var customer_partyIdentification = new List<PartyIdentificationType>();
-                customer_partyIdentification.Add(new PartyIdentificationType { ID = new IDType { schemeID = "VKN", Value = "1234567801" } });
-                //Müşteri Bitti
-
-                //Satıcı Başladı
-                var supplierParty_partyIdentification = new List<PartyIdentificationType>();
-                supplierParty_partyIdentification.Add(new PartyIdentificationType { ID = new IDType { schemeID = "VKN", Value = "1234567803" } });
-                var supplierParty_communicationType = new List<CommunicationType>();
-                supplierParty_communicationType.Add(new CommunicationType { Value = new ePlatform.Integration.Models.Invoice21.ValueType { Value = "denemee" } });
-                //Satıcı Bitti
-
-                //Vergiler
-                var taxSubTotal = new List<TaxSubtotalType>();
-                taxSubTotal.Add(new TaxSubtotalType
-                {
-                    TaxAmount = new TaxAmountType { Value = 2214, currencyID = "TRY" },
-                    Percent = new PercentType1 { Value = 18 },
-                    TaxCategory = new TaxCategoryType { TaxScheme = new TaxSchemeType { Name = new NameType1 { Value = "KDV Gerçek" }, TaxTypeCode = new TaxTypeCodeType { Value = "0015" } } }
-                });
-                var taxTotal = new List<TaxTotalType>();
-                taxTotal.Add(new TaxTotalType
-                {
-                    TaxAmount = new TaxAmountType { currencyID = "TRY", Value = 2214 },
-                    TaxSubtotal = taxSubTotal.ToArray()
-                });
-
-                //not
-                var note = new List<NoteType>();
-                note.Add(new NoteType { Value = "Not1" });
-                //not
-
-                //kalemler başladı
-                var taxSubTotalList = new List<TaxSubtotalType>();
-                taxSubTotalList.Add(new TaxSubtotalType
-                {
-                    TaxAmount = new TaxAmountType { Value = 2214, currencyID = "TRY" },
-                    Percent = new PercentType1 { Value = 18 },
-                    TaxCategory = new TaxCategoryType { TaxScheme = new TaxSchemeType { Name = new NameType1 { Value = "KDV Gerçek" }, TaxTypeCode = new TaxTypeCodeType { Value = "0015" } } }
-                });
-
-                var line = new List<InvoiceLineType>();
-                line.Add(new InvoiceLineType
-                {
-                    ID = new IDType { Value = "1" },
-                    LineExtensionAmount = new LineExtensionAmountType { currencyID = "TRY", Value = 12300 },
-                    Item = new ItemType { Name = new NameType1 { Value = "NoteBook" }, SellersItemIdentification = new ItemIdentificationType { ID = new IDType { Value = "123456" } } },
-                    Price = new PriceType { PriceAmount = new PriceAmountType { currencyID = "TRY", Value = 12300 } },
-                    InvoicedQuantity = new InvoicedQuantityType { unitCode = "NIU", Value = 1 },
-                    TaxTotal = new TaxTotalType { TaxAmount = new TaxAmountType { Value = 2214, currencyID = "TRY" }, TaxSubtotal = taxSubTotalList.ToArray() }
-                });
-
-                //AdditionalDocumentReference
-                var additionalDocumentReference = new List<DocumentReferenceType>();
-
-                //kalemler bitti   
-
-                //string path = @"general.xslt";
-                //string s = File.ReadAllText(path, Encoding.UTF8);
-                //byte[] bytes = Encoding.UTF8.GetBytes(s);
-
-                ////Xslt eklenmesi
-                //additionalDocumentReference.Add(new DocumentReferenceType { ID = new IDType { Value = "CDA79E4E-EE13-4D9C-B625-87286EC30358" }, IssueDate = new IssueDateType { Value = Convert.ToDateTime("2015-01-01") }, DocumentType = new DocumentTypeType { Value = "Xslt" }, Attachment = new AttachmentType { EmbeddedDocumentBinaryObject = new EmbeddedDocumentBinaryObjectType { characterSetCode = "UTF-8", encodingCode = "Base64", filename = "WRK2015000000001.xslt", mimeCode = "application/xml", Value = bytes } } });
-
-                var invoiceType = new InvoiceType
-                {
-                    UBLVersionID = new UBLVersionIDType { Value = "2.1" },
-                    CustomizationID = new CustomizationIDType { Value = "TR1.2" },
-                    ProfileID = new ProfileIDType { Value = "TEMELFATURA" },
-                    InvoiceTypeCode = new InvoiceTypeCodeType { Value = "SATIS" },
-                    CopyIndicator = new CopyIndicatorType { Value = false },
-                    ID = new IDType { Value = "WRK2015000000010" },
-                    IssueDate = new IssueDateType { Value = Convert.ToDateTime("2019-01-01") },
-                    IssueTime = new IssueTimeType { Value = Convert.ToDateTime("00:00") },
-                    UUID = new UUIDType { Value = Guid.NewGuid().ToString().ToUpperInvariant() },
-                    DocumentCurrencyCode = new DocumentCurrencyCodeType { Value = "TRY" },
-                    LineCountNumeric = new LineCountNumericType { Value = 1 },
-                    AdditionalDocumentReference = additionalDocumentReference.ToArray(),
-                    TaxTotal = taxTotal.ToArray(),
-                    AccountingCustomerParty = new CustomerPartyType
-                    {
-                        Party = new PartyType
-                        {
-                            WebsiteURI = new WebsiteURIType { Value = "www.xxxx.com.tr" },
-                            PartyIdentification = customer_partyIdentification.ToArray(),
-                            PartyName = new PartyNameType { Name = new NameType1 { Value = "Müşteri Firma Deneme Faturası Ltd.Şti" } },
-                            PartyTaxScheme = new PartyTaxSchemeType { TaxScheme = new TaxSchemeType { Name = new NameType1 { Value = "deneme" }, TaxTypeCode = new TaxTypeCodeType { Value = "deneme" } } },
-                            Contact = new ContactType { ElectronicMail = new ElectronicMailType { Value = "eposta@hotmail.com" }, Note = new NoteType { Value = "deneme" }, Telefax = new TelefaxType { Value = "03225982030" }, Telephone = new TelephoneType { Value = "03225982030" } },
-                            PostalAddress = new AddressType { Country = new CountryType { Name = new NameType1 { Value = "CountryName" } }, Room = new RoomType { Value = "room" }, StreetName = new StreetNameType { Value = "street" }, BuildingName = new BuildingNameType { Value = "buldingname" }, BuildingNumber = new BuildingNumberType { Value = "BuildingNumber" }, CitySubdivisionName = new CitySubdivisionNameType { Value = "CitySubdivisionName" }, CityName = new CityNameType { Value = "CityName" }, Region = new RegionType { Value = "region" } },
-                        }
-                    },
-                    AccountingSupplierParty = new SupplierPartyType
-                    {
-                        Party = new PartyType
-                        {
-                            WebsiteURI = new WebsiteURIType { Value = "www.xxxx.com.tr" },
-                            PartyIdentification = supplierParty_partyIdentification.ToArray(),
-                            PartyName = new PartyNameType { Name = new NameType1 { Value = "Satıcı Firma Ltd.Şti" } },
-                            PartyTaxScheme = new PartyTaxSchemeType { TaxScheme = new TaxSchemeType { Name = new NameType1 { Value = "deneme" }, TaxTypeCode = new TaxTypeCodeType { Value = "deneme" } } },
-                            Contact = new ContactType { ElectronicMail = new ElectronicMailType { Value = "eposta@hotmail.com" }, Note = new NoteType { Value = "deneme" }, Telefax = new TelefaxType { Value = "03225982030" }, Telephone = new TelephoneType { Value = "03225982030" } },
-                            PostalAddress = new AddressType { Country = new CountryType { Name = new NameType1 { Value = "CountryName" } }, Room = new RoomType { Value = "room" }, StreetName = new StreetNameType { Value = "street" }, BuildingName = new BuildingNameType { Value = "buldingname" }, BuildingNumber = new BuildingNumberType { Value = "BuildingNumber" }, CitySubdivisionName = new CitySubdivisionNameType { Value = "CitySubdivisionName" }, CityName = new CityNameType { Value = "CityName" }, Region = new RegionType { Value = "region" } },
-                        }
-                    },
-                    LegalMonetaryTotal = new MonetaryTotalType { LineExtensionAmount = new LineExtensionAmountType { currencyID = "TRY", Value = 12300 }, TaxExclusiveAmount = new TaxExclusiveAmountType { currencyID = "TRY", Value = 12300 }, TaxInclusiveAmount = new TaxInclusiveAmountType { currencyID = "TRY", Value = 14514 }, AllowanceTotalAmount = new AllowanceTotalAmountType { currencyID = "TRY", Value = 0 }, PayableAmount = new PayableAmountType { currencyID = "TRY", Value = 14514 } },
-                    Note = note.ToArray(),
-
-                    InvoiceLine = line.ToArray(),
-                };
-
-                //Invoice21 Modeli kullanılarak model doldurma işlemi Sona ermiştir,
-
-                string invoiceBase64Model = default;
-
-                using (var stream = new MemoryStream())
-                {
-                    //Oluşturmuş olduğumuz modeli xml dosyasına döndürme işlemine geçildi
-                    ConvertToZipFile convertZip = new ConvertToZipFile();
-                    var writer = new XmlTextWriter(stream, Encoding.UTF8);
-                    var xmlSerializer = new XmlSerializer(typeof(InvoiceType));
-                    xmlSerializer.Serialize(writer, invoiceType, XmlNamespaceHelper.InvoiceNamespaces);
-                    writer.Flush();
-                    stream.Seek((long)0, SeekOrigin.Begin);
-
-                    //Oluşturmuş olduğumuz xml dosyasını ZipFileToByte metodu ile byte koduna dönüştürdük,
-                    var zipFile = convertZip.ZipFileToByte(stream, invoiceType.UUID.Value.ToString() + ".xml");
-
-                    //Streame dönüştürdüğümüz bytcodunu base64 stringe dönüştürmemiz gerekmektedir ve bu işlem burada yapılmaktadır,
-                    invoiceBase64Model = Convert.ToBase64String(zipFile);
-                }
+                var ublHandler = new UblHandler();
+                (string invoiceBase64Model, _) = ublHandler.CreateUbl();
 
                 //Http.Post requestini oluşturmak için isteğin Bodysini oluşturuyoruz,
-                OutboxInvoiceZipModel model = new OutboxInvoiceZipModel();
 
+                OutboxInvoiceZipModel model = new OutboxInvoiceZipModel();
                 model.InvoiceZip = invoiceBase64Model;
-                model.Status = 20;
+                model.Status = 0;
                 model.CheckLocalReferenceId = false;
                 model.Prefix = "";
-                model.UseManualInvoiceId = false;
-                model.TargetAlias = "urn:mail:defaulttest11pk@medyasoft.com.tr";
-                model.AppType = 1;
+                model.UseManualInvoiceId = true;
+                // model.TargetAlias = "urn:mail:defaulttest11pk@medyasoft.com.tr"; //Birden fazla posta kutusu varsa TargetAlias'ta belirtilen posta kutusu kullanılır eğer gönderilmezse userfirstAlias true yapılmalı
+                model.AppType = 2;
+                model.UseFirstAlias = true;//birden fazla posta Kutusu varsa true yollandığında ilk posta kutusuna otomatik fatura kesilerek taslak olarak kaydedilir
+                model.EArsivInfo = new EArsivInfoModel() { SendEMail = false };
 
                 string token = resToken.access_token;
                 string parsedModel = JsonConvert.SerializeObject(model);
+
                 using (var client = new HttpClient())
                 using (var request = new HttpRequestMessage(HttpMethod.Post, "https://efaturaservicetest.isim360.com/v1/outboxInvoice"))
                 {
@@ -489,9 +359,48 @@ namespace ePlatform.Integration.Controllers
                 return Ok();
             }
             else
-            {
                 return Ok("Token almak için /gettoken uç noktasını çağırın");
+        }
+        [HttpGet]
+        [Route("templateubl")]
+        public async Task<IActionResult> TemplateUbl()
+        {
+            var ublHandler = new UblHandler();
+            string invoiceBase64Model = default;
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            (string tmpStr, InvoiceType invoiceType) = ublHandler.CreateUbl();
+            using (var stream = new MemoryStream())
+            {
+                //Oluşturmuş olduğumuz modeli xml dosyasına döndürme işlemine geçildi
+                ConvertToZipFile convertZip = new ConvertToZipFile();
+                var writer = new XmlTextWriter(stream, Encoding.UTF8);
+                var xmlSerializer = new XmlSerializer(typeof(InvoiceType));
+
+                xmlSerializer.Serialize(writer, invoiceType, XmlNamespaceHelper.InvoiceNamespaces);
+                writer.Flush();
+                stream.Seek((long)0, SeekOrigin.Begin);
+                string decoded = Encoding.UTF8.GetString(stream.ToArray());
+                //Current Directory'de oluşturulan xml dosya örneği Template içerisine yazılıyor,
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter($"{currentDirectory}" + @"\Template\outXml_" + invoiceType.UUID.Value.ToString() + ".xml", true))
+                {
+                    file.WriteLine(decoded);
+                }
+
+                //Oluşturmuş olduğumuz xml dosyasını ZipFileToByte metodu ile byte koduna dönüştürdük,
+                var zipFile = convertZip.ZipFileToByte(stream, invoiceType.UUID.Value.ToString() + ".xml");
+
+                //Streame dönüştürdüğümüz bytcodunu base64 stringe dönüştürmemiz gerekmektedir ve bu işlem burada yapılmaktadır,
+                invoiceBase64Model = Convert.ToBase64String(zipFile);
             }
+            //oluşturulan base64 model çıktısını Template klasörü içer,isine yazıyoruz postman içerisinde  InvoiceZip içerisinde gönderilebilir.
+            using (System.IO.StreamWriter file =
+               new System.IO.StreamWriter($"{currentDirectory}" + @"\Template\invoiceBase64Model_" + invoiceType.UUID.Value.ToString() + ".txt", true))
+            {
+                file.WriteLine(invoiceBase64Model);
+            }
+            return Ok("Template dosyaları OutFiles klasörüne ilgili fatura numarası ile oluşturuldu");
         }
     }
 }
