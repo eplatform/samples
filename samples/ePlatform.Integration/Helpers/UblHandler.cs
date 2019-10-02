@@ -30,8 +30,6 @@ namespace ePlatform.Integration.Helpers
             //Satıcı Başladı
             var supplierParty_partyIdentification = new List<PartyIdentificationType>();
             supplierParty_partyIdentification.Add(new PartyIdentificationType { ID = new IDType { schemeID = "VKN", Value = "1234567803" } });
-            var supplierParty_communicationType = new List<CommunicationType>();
-            supplierParty_communicationType.Add(new CommunicationType { Value = new ePlatform.Integration.Models.Invoice21.ValueType { Value = "denemee" } });
             //Satıcı Bitti
 
             //Vergiler
@@ -84,14 +82,6 @@ namespace ePlatform.Integration.Helpers
 
             //kalemler bitti   
 
-            //string path = @"general.xslt";
-            //string s = File.ReadAllText(path, Encoding.UTF8);
-            //byte[] bytes = Encoding.UTF8.GetBytes(s);
-
-            ////Xslt eklenmesi
-            //additionalDocumentReference.Add(new DocumentReferenceType { ID = new IDType { Value = "CDA79E4E-EE13-4D9C-B625-87286EC30358" }, 
-            // IssueDate = new IssueDateType { Value = Convert.ToDateTime("2015-01-01") }, DocumentType = new DocumentTypeType { Value = "Xslt" }, 
-            // Attachment = new AttachmentType { EmbeddedDocumentBinaryObject = new EmbeddedDocumentBinaryObjectType { characterSetCode = "UTF-8", 
             // encodingCode = "Base64", filename = "WRK2015000000001.xslt", mimeCode = "application/xml", Value = bytes } } });
             additionalDocumentReference.Add(new DocumentReferenceType
             {
@@ -125,6 +115,11 @@ namespace ePlatform.Integration.Helpers
                 {
                     Party = new PartyType
                     {
+                        Person = new PersonType
+                        {
+                            FirstName = new FirstNameType { Value = "Entegrasyon" },
+                            FamilyName = new FamilyNameType { Value = "Service" }
+                        },
                         WebsiteURI = new WebsiteURIType { Value = "www.xxxx.com.tr" },
                         PartyIdentification = customer_partyIdentification.ToArray(),
                         PartyName = new PartyNameType { Name = new NameType1 { Value = "Müşteri Firma Deneme Faturası Ltd.Şti" } },
@@ -146,7 +141,7 @@ namespace ePlatform.Integration.Helpers
                             CitySubdivisionName = new CitySubdivisionNameType { Value = "CitySubdivisionName" },
                             CityName = new CityNameType { Value = "CityName" },
                             Region = new RegionType { Value = "region" }
-                        },
+                        }
                     }
                 },
                 AccountingSupplierParty = new SupplierPartyType
