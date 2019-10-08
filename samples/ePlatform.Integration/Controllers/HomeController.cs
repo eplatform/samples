@@ -126,6 +126,40 @@ namespace ePlatform.Integration.Controllers
                 return Ok("Token almak için /gettoken uç noktasını çağırın");
             }
         }
+
+        //http://localhost:5004/v1/outboxinvoice/ubl/f201ba2e-881f-4798-a715-d6090a28d7b2
+        //Aynı örneği inboxinvoice içinde kullanabilirsiniz,sadece url ve id değiştirilmelidir.
+        [HttpGet]
+        [Route("outboxInvoice/ubl/{id}")]
+
+        public async Task<ActionResult> GetOutboxUbl(Guid id)
+        {
+            ConvertToZipFile convertZip = new ConvertToZipFile();
+
+            if (resToken != null)
+            {
+                string token = resToken.access_token;
+                using (var client = new HttpClient())
+                using (var request = new HttpRequestMessage(HttpMethod.Get, $"https://efaturaservicetest.isim360.com/v1/outboxInvoice/ubl/{id}"))
+                {
+                    request.Headers.Add("Authorization", $"Bearer {token}");
+                    var response = await client.SendAsync(request);
+                    var asString = await response.Content.ReadAsByteArrayAsync();
+                    using (var stream = convertZip.UnzipFile(asString))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(InvoiceType));
+                        var x = (InvoiceType)serializer.Deserialize(stream);
+
+                    }
+                }
+                return Ok("Ubl başarıyla Deserialize edilmiştir.");
+            }
+            else
+            {
+                return Ok("Token almak için /gettoken uç noktasını çağırın");
+            }
+        }
+
         [HttpGet]
         [Route("cancel/{id}")]
 
@@ -283,7 +317,7 @@ namespace ePlatform.Integration.Controllers
             }
         }
 
-        //https://localhost:5001/home/postzip
+        //https://localhost:5001/home/postubl
 
 
         [HttpGet]
