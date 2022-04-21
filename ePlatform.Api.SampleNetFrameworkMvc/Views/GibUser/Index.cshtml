@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ePlatform.Api.GibUserAliasModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Posta Kutusu Etiketi
+        </th>
+        <th>
+            Mükellefin ünvanı
+        </th>
+        <th>
+            Mükellefin VKN/TCKN bilgisi
+        </th>
+        <th>
+            Uygulama türü
+        </th>
+        <th>
+            Alias türü
+        </th>
+        <th>
+            Mükellefin türü
+        </th>
+        <th>
+            Alias'ının GİB sisteminde oluşturulma tarihi
+        </th>
+        <th>
+            Mükellefin GİB sisteminde oluşturulma tarihi
+        </th>
+        <th>
+            Aktif Mi
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @(item.Alias)
+            </td>
+            <td>
+                @(item.Title)
+            </td>
+            <td>
+                @(item.Identifier)
+            </td>
+            <td>
+                @(item.AppType)
+            </td>
+            <td>
+                @(item.GibAliasType)
+            </td>
+            <td>
+                @(item.GibUserType)
+            </td>
+            <td>
+                @(item.AliasCreationTime)
+            </td>
+            <td>
+                @(item.FirstCreationTime)
+            </td>
+            <td>
+                @(item.IsActive)
+            </td>
+        </tr>
+    }
+
+</table>
+
