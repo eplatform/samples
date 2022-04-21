@@ -9,6 +9,9 @@ Servisleri nuget paketleri ile kullanmak için [nuget adresimizi](https://nuget.
 
 ## Kullanım
 
+Tüm servis metodlarında authentication sağlamak için ApiKey kullanılması gerekmektedir.
+ApiKey'inizi oluşturmak için [e-Şirket Kimlik Doğrulama](https://developer.turkcellesirket.com/pages/authentication.html) dokümanını inceleyin.
+
 ### Console Uygulaması/Minimal API Örneği
 
 Console uygulamanızda `main` metodu içine aşağıdaki satırları ekledikten sonra, interfaceler üzerinden servis metodlarına erişebilirsiniz.
@@ -34,7 +37,7 @@ ServiceProvider serviceProvider = new ServiceCollection()
 
 ### .NET Core Örneği
 
-.NET core uygulamanızda `Startup` dosyanızı aşağıdaki gibi yapılandırın.
+.NET core uygulamanızda `Startup` dosyanızı aşağıdaki gibi yapılandırın,
 
 ```
 public Startup(IConfiguration configuration)
@@ -51,7 +54,19 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+appsettings.json dosyasınıza aşağıdaki nodu ekleyin,
+
+```
+"ePlatformClientOptions": {
+
+	"InvoiceServiceUrl" : "https://efaturaservicetest.isim360.com",
+	"TicketServiceUrl" : "https://ebiletservicetest.isim360.com",
+	"ApiKey": ""
+},
+```
+
 Controller injection
+
 ```
 private readonly IOutboxInvoiceClient _outboxInvoiceClient;
 
