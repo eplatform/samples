@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ePlatform.Api.CountryModel>
+
+@{
+    ViewBag.Title = "Countries";
+}
+<div class="row">
+
+    <h2>Countries</h2>
+
+    <table class="table">
+        <tr>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(item.Id)
+                </td>
+                <td>
+                    @(item.Name)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
