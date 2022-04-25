@@ -2,7 +2,7 @@
 
 e-Belge ve e-Bilet uygulamaları için .Net Client kullanım örnekleri.
 
-Kütüphaneler NET Standard 2.0 ile geliştirilmiştir. Uyumlu versiyonlar için [Net Standard Versiyon uyumluluk tablosuna](https://docs.microsoft.com/tr-tr/dotnet/standard/net-standard?tabs=net-standard-2-0#select-net-standard-version) gözatabilirsiniz.
+Örnek projeler [e-Platform nuget 1.3.1](https://www.nuget.org/packages/ePlatform.Api/) kütüphanelerini kullanmaktadır. Kütüphaneler NET Standard 2.0 ile geliştirilmiştir. Uyumlu versiyonlar için [Net Standard Versiyon uyumluluk tablosuna](https://docs.microsoft.com/tr-tr/dotnet/standard/net-standard?tabs=net-standard-2-0#select-net-standard-version) gözatabilirsiniz.
 
 ## Başlarken
 Servisleri nuget paketleri ile kullanmak için [nuget adresimizi](https://nuget.org/eplatform) takip edebilir, teknik dokümantasyon için  [Turkcell e-Şirket Teknik Dokümanlar](https://developer.turkcellesirket.com/) adresimizi ziyaret edebilirsiniz. Entegrasyon süreçlerinizde [entegrasyon@eplatform.com.tr](entegrasyon@eplatform.com.tr) üzerinden iletişime geçebilirsiniz.
