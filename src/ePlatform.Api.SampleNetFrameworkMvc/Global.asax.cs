@@ -5,7 +5,6 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Integration.Mvc;
-using ePlatform.Api;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ePlatform.Api.SampleNetFrameworkMvc
