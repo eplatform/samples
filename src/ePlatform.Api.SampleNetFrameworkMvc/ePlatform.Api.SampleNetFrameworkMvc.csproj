@@ -50,6 +50,10 @@
     <Reference Include="ePlatform.Api, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\ePlatform.Api.SampleNetFrameworkMvc\packages\ePlatform.Api.1.3.1\lib\netstandard2.0\ePlatform.Api.dll</HintPath>
     </Reference>
+    <Reference Include="ePlatform.Api, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ePlatform.Api.1.3.1\lib\netstandard2.0\ePlatform.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Flurl, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\ePlatform.Api.SampleNetFrameworkMvc\packages\Flurl.2.8.2\lib\net40\Flurl.dll</HintPath>
     </Reference>
