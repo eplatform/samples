@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePlatform.Api.SampleNetCore
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePlatform.Api.SampleNetFrameworkMvc", "src\ePlatform.Api.SampleNetFrameworkMvc\ePlatform.Api.SampleNetFrameworkMvc.csproj", "{8EE5A14D-DD6C-4AF2-BA6E-EEB73AE5E56C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePlatform.Api.SampleNetFrameworkUnity", "src\ePlatform.Api.SampleNetFrameworkUnity\ePlatform.Api.SampleNetFrameworkUnity.csproj", "{EEB2CED4-3A52-43EA-B966-C226051E487E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8EE5A14D-DD6C-4AF2-BA6E-EEB73AE5E56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE5A14D-DD6C-4AF2-BA6E-EEB73AE5E56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE5A14D-DD6C-4AF2-BA6E-EEB73AE5E56C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB2CED4-3A52-43EA-B966-C226051E487E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB2CED4-3A52-43EA-B966-C226051E487E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB2CED4-3A52-43EA-B966-C226051E487E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB2CED4-3A52-43EA-B966-C226051E487E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
